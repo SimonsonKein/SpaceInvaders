@@ -20,7 +20,12 @@ private const val COLOR_MODE_KEY = "spaceinvaders:colorMode"
 
 @InitSilk
 fun initColorMode(ctx: InitSilkContext) {
-    ctx.config.initialColorMode = localStorage.getItem(COLOR_MODE_KEY)?.let { ColorMode.valueOf(it) } ?: ColorMode.DARK
+    ctx.config.initialColorMode = try {
+        localStorage.getItem(COLOR_MODE_KEY)?.let { ColorMode.valueOf(it) } ?: ColorMode.DARK
+    } catch (e : Exception) {
+        e.message?.let { error(it) }
+        ColorMode.DARK
+    }
 }
 
 @App
